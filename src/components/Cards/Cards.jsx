@@ -7,10 +7,32 @@ import {
     Button,
     Typography,
 } from "@material-tailwind/react";
+import { useCartContext } from '../../context/CartContext';
 
-function Cards({products,index}) {
+function Cards({products}) {
+    const {cartProductsDetails, setCartProductsDetails} = useCartContext();
+    function handleAddToCart(productId){
+        let updateCartDetails = null;
+        let isAlreadyExist = cartProductsDetails.some(product => product.id === productId);
+        if(isAlreadyExist){
+            updateCartDetails = cartProductsDetails.map((cartProducts) =>{
+                if(cartProducts.id === productId){
+                    return{
+                        ...products,
+                        quantity: cartProducts.quantity+1
+                    }
+                }else{
+                    return cartProducts
+                }
+            })
+        }else{
+            updateCartDetails = [...cartProductsDetails, {...products, quantity:1}]
+        }
+
+        setCartProductsDetails(updateCartDetails);
+    }
     return (
-        <Card className="w-72 m-6" key={index}>
+        <Card className="w-72 m-6">
             <CardHeader floated={false} className="relative h-56">
                 <img
                     src={products.imageUrl}
@@ -27,7 +49,7 @@ function Cards({products,index}) {
                 </Typography>
             </CardBody>
             <CardFooter className="pt-0">
-                <Button>Add To Cart</Button>
+                <Button onClick={()=>handleAddToCart(products.id)}>Add To Cart</Button>
             </CardFooter>
         </Card>
     )

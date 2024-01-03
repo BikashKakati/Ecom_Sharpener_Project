@@ -6,22 +6,26 @@ import { Typography } from '@material-tailwind/react'
 function App() {
   const productsArr = [
     {
+      id:"product1",
       title: 'White Colors',
       price: 100,
       imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%201.png',
     },
     {
+      id:"product2",
       title: 'Black and white Colors',
       price: 50,
       imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%202.png',
     },
     {
+      id:"product3",
       title: 'Yellow and Black Colors',
       price: 70,
       imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%203.png',
     },
 
     {
+      id:"product4",
       title: 'Blue Color',
       price: 100,
       imageUrl: 'https://prasadyash2411.github.io/ecom-website/img/Album%204.png',
@@ -38,9 +42,9 @@ function App() {
       </div>
       <div className="w-full flex items-start justify-between flex-wrap">
         {
-          productsArr.map((products, index) => {
+          productsArr.map((products) => {
             return (
-              <Cards key={index} products={products}/>
+              <Cards key={products.id} products={products}/>
             )
           })
         }

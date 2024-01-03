@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { ShoppingCartIcon, XMarkIcon } from "@heroicons/react/24/solid"
-import { Navbar, Typography, Collapse, IconButton, useSelect } from '@material-tailwind/react'
+import { ShoppingCartIcon} from "@heroicons/react/24/solid"
+import { Navbar, Typography,IconButton,} from '@material-tailwind/react'
 import Cart from '../Cart/Cart';
+import { useCartContext } from '../../context/CartContext';
 
 function NavList() {
 
@@ -42,6 +43,12 @@ function NavList() {
 }
 function Header() {
   const [openCart, setOpenCart] = useState(false);
+  const {cartProductsDetails} =  useCartContext();
+
+  const totalQuantity = cartProductsDetails.reduce((initialQuantity, products) =>{
+    return initialQuantity += products.quantity;
+  },0)
+
   return (
     <>
       {
@@ -67,7 +74,7 @@ function Header() {
             onClick={() => setOpenCart(!openCart)}
           >
             <ShoppingCartIcon className="h-6 w-6" strokeWidth={2} />
-            <span className='absolute top-[-15px] right-[-15px] py-1 px-2 bg-red-600 text-white rounded-full'>5</span>
+            <span className='absolute top-[-15px] right-[-15px] py-1 px-2 bg-red-600 text-white rounded-full'>{totalQuantity} </span>
           </IconButton>
         </div>
       </Navbar>
