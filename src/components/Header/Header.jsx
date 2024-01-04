@@ -3,20 +3,21 @@ import { ShoppingCartIcon} from "@heroicons/react/24/solid"
 import { Navbar, Typography,IconButton,} from '@material-tailwind/react'
 import Cart from '../Cart/Cart';
 import { useCartContext } from '../../context/CartContext';
+import { NavLink } from 'react-router-dom';
 
 function NavList() {
 
   return (
-    <ul className="my-2 flex flex-col gap-2 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
+    <ul className="my-2 flex flex-row gap-2">
       <Typography
         as="li"
         variant="small"
         color="blue-gray"
         className="p-1 font-medium"
       >
-        <a href="#" className="flex items-center hover:text-blue-500 transition-colors">
+        <NavLink to="/" className="flex items-center hover:text-blue-500 transition-colors">
           Home
-        </a>
+        </NavLink>
       </Typography>
       <Typography
         as="li"
@@ -24,9 +25,9 @@ function NavList() {
         color="blue-gray"
         className="p-1 font-medium"
       >
-        <a href="#" className="flex items-center hover:text-blue-500 transition-colors">
+        <NavLink to="/store" className="flex items-center hover:text-blue-500 transition-colors">
           Store
-        </a>
+        </NavLink>
       </Typography>
       <Typography
         as="li"
@@ -34,9 +35,9 @@ function NavList() {
         color="blue-gray"
         className="p-1 font-medium"
       >
-        <a href="#" className="flex items-center hover:text-blue-500 transition-colors">
+        <NavLink to="/about" className="flex items-center hover:text-blue-500 transition-colors">
           About
-        </a>
+        </NavLink>
       </Typography>
     </ul>
   );
@@ -64,7 +65,7 @@ function Header() {
           >
             The Generics
           </Typography>
-          <div className="hidden lg:block">
+          <div className="lg:block">
             <NavList />
           </div>
           <IconButton
