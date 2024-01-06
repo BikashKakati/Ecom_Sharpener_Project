@@ -23,11 +23,11 @@ function Form() {
     }
 
     return (
-        <Card color="transparent" shadow={false} className="mt-10">
+        <Card color="transparent" shadow={false} className="mt-10 max-w-96 w-full">
             <Typography variant="h4" color="blue-gray" className="text-center">
                 Contact Us
             </Typography>
-            <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96" ref={formRef}>
+            <form className="mt-8 mb-2" ref={formRef}>
                 <div className="mb-1 flex flex-col gap-6">
                     <Typography variant="h6" color="blue-gray" className="-mb-3">
                         Name

@@ -1,8 +1,11 @@
 import React from 'react'
+import LoginForm from '../components/Form/LoginForm'
 
 function Home() {
   return (
-    <div className='text-center'>Home</div>
+    <div className='w-full h-full flex items-center justify-center'>
+        <LoginForm/>
+    </div>
   )
 }
 

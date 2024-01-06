@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { ShoppingCartIcon} from "@heroicons/react/24/solid"
-import { Navbar, Typography,IconButton,} from '@material-tailwind/react'
+import { Navbar, Typography,IconButton, Button,} from '@material-tailwind/react'
 import Cart from '../Cart/Cart';
 import { useCartContext } from '../../context/CartContext';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 function NavList() {
 
@@ -54,11 +54,21 @@ function NavList() {
 }
 function Header() {
   const [openCart, setOpenCart] = useState(false);
-  const {cartProductsDetails} =  useCartContext();
+  const {userToken, logOutHandler,cartProductsDetails, setErrMessage, setUserToken} = useCartContext();
+  const Navigate = useNavigate();
 
   const totalQuantity = cartProductsDetails.reduce((initialQuantity, products) =>{
     return initialQuantity += products.quantity;
   },0)
+
+  async function handleLogOut(){
+    try{
+      await logOutHandler();
+      setUserToken(null);
+    }catch(err){
+      setErrMessage(err.message);
+    }
+  }
 
   return (
     <>
@@ -78,6 +88,7 @@ function Header() {
           <div className="lg:block">
             <NavList />
           </div>
+          <div className="">
           <IconButton
             variant="text"
             className="h-6 w-6 text-inherit hover:bg-transparent focus:bg-transparent active:bg-transparent relative"
@@ -87,6 +98,13 @@ function Header() {
             <ShoppingCartIcon className="h-6 w-6" strokeWidth={2} />
             <span className='absolute top-[-15px] right-[-15px] py-1 px-2 bg-red-600 text-white rounded-full'>{totalQuantity} </span>
           </IconButton>
+          {
+          !!userToken ? 
+          <Button size='sm' className='ml-5' onClick={handleLogOut}>logout</Button> 
+          :
+          <Button size='sm' className='ml-5' onClick={()=> Navigate("/")}>log in</Button>
+          }
+          </div>
         </div>
       </Navbar>
     </>
