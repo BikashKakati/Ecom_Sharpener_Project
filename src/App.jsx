@@ -15,10 +15,13 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/store" element={<Store />} />
-          <Route path='/productdetails/:id' element={<ProductDetails/>}/>
-          <Route path="/about" element={<About />} />
-          <Route path="/contactus" element={<ContactUs />} />
+          <Route path="store" element={<Store />} />
+          <Route path='productdetails/:id' element={<ProductDetails />}>
+            <Route path='comments' element={<h2>Comments</h2>} />
+          </Route>
+          <Route path="about" element={<About />} />
+          <Route path="contactus" element={<ContactUs />} />
+          <Route path="*" element={<h1 className='text-center text-4xl'>Unable to find the page</h1>} />
         </Routes>
       </div>
     </BrowserRouter>

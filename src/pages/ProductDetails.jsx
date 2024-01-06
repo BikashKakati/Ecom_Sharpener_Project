@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { Outlet, useParams } from 'react-router-dom'
 
 const productDetails = [
   {
@@ -26,12 +26,10 @@ const productDetails = [
 
 function ProductDetails() {
   const { id } = useParams();
-  let products = null;
-  productDetails.forEach(product => {
-    if (product.id === id) {
-      products = product;
-    }
-  });
+  const products = productDetails.find(product => product.id === id);
+  if(!products){
+    return <p>Product cannot found!</p>
+  }
   return (
     <div className="max-w-[72rem] w-full mx-auto">
       <div className="max-w-64 w-full m-auto">
@@ -52,7 +50,7 @@ function ProductDetails() {
         {
           products.reviews.map((review,idx) =>{
             return(
-              <div className="">
+              <div className="" key={idx}>
                 <p>{review.name}</p>
                 <p>{review.review}</p>
               </div>
@@ -60,6 +58,7 @@ function ProductDetails() {
           })
         }
       </div>
+      <Outlet/>
     </div>
   )
 }
