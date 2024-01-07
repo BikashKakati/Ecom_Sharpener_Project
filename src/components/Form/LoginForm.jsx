@@ -9,15 +9,17 @@ import {
     CardBody,
     Alert,
 } from "@material-tailwind/react";
-import { useCartContext } from '../../context/CartContext';
+import { useAuthContext } from '../../context/AuthContext';
+
+const LOCAL_STORAGE_KEY = "USER_TOKEN";
 
 function LoginForm() {
-    const { signUpHandler, logInHandler, setUserToken, errMessage, setErrMessage, updatePasswordHandler, userToken } = useCartContext();
+    const { signUpHandler, logInHandler, setUserToken, errMessage, setErrMessage, updatePasswordHandler, userToken, setIsLoading, isLoading } = useAuthContext();
     const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isLogIn, setIsLogIn] = useState(true);
-    const [updatePasswordMode, setUpdatePasswordMode] = useState(false);
+    const [isLogIn, setIsLogIn] = useState(true); // we are in login mode but not logged in till now.
+
     useEffect(() => {
         if (errMessage) {
             const timer = setTimeout(() => {
@@ -32,36 +34,54 @@ function LoginForm() {
 
     async function submitHandler(e) {
         e.preventDefault();
-        if(updatePasswordMode){
-            await updatePasswordHandler(password);
-            setUpdatePasswordMode(prev => !prev);
+        setIsLoading(true);
+        if (userToken) {
+            // change password
+            try {
+                if (password.length < 6) {
+                    throw new Error("Invalid Password");
+                }
+                await updatePasswordHandler(password);
+                setUserToken("");
+                localStorage.setItem(LOCAL_STORAGE_KEY, null);
+                setPassword("");
+            } catch (err) {
+                setErrMessage(err.message)
+            }
+            setIsLoading(false);
             return;
         }
         try {
+            // to login
             if (isLogIn) {
                 const res = await logInHandler(email, password);
-                setUserToken(res && res?.user?.accessToken);
+                const acsToken = res && res?.user?.accessToken;
+                setUserToken(acsToken);
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(acsToken));
                 navigate("/store");
             } else {
+                // to sign up
                 const res = await signUpHandler(email, password);
                 setIsLogIn(prev => !prev);
-                console.log(res);
             }
             setEmail("");
             setPassword("");
         } catch (err) {
             setErrMessage(err.message);
         }
+        setIsLoading(false);
     }
+
+
     return (
         <Card color="transparent" shadow={false} className="mt-10 max-w-96 w-full">
             <Typography variant="h4" color="blue-gray" className="text-center">
-                {isLogIn ? "Log In" : "Sign Up"}
+                {userToken ? "Change Password" : isLogIn ? "Log In" : "Sign Up"}
             </Typography>
             <CardBody>
                 <form className="mt-2 mb-2 flex flex-col gap-6">
                     {
-                        !updatePasswordMode &&
+                        !userToken &&
                         <>
                             <Typography variant="h6" color="blue-gray" className="-mb-3">
                                 Email
@@ -73,13 +93,14 @@ function LoginForm() {
                                 labelProps={{
                                     className: "before:content-none after:content-none",
                                 }}
+                                value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                             />
                         </>
                     }
 
                     <Typography variant="h6" color="blue-gray" className="-mb-3">
-                        Password
+                        {`${userToken ? "New":""} ${"Password"}`}
                     </Typography>
                     <Input
                         size="lg"
@@ -88,23 +109,22 @@ function LoginForm() {
                         labelProps={{
                             className: "before:content-none after:content-none",
                         }}
+                        value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <Button className="mt-6" fullWidth onClick={submitHandler}>
-                        Submit
+                        {isLoading ? "Loading..." : "Submit"}
                     </Button>
 
                 </form>
             </CardBody>
             <CardFooter className='p-1'>
                 {errMessage && <Alert className='bg-red-500'>{errMessage}</Alert>}
-                <Button variant='text' onClick={() => {
+                {!userToken && <Button variant='text' onClick={() => {
                     setIsLogIn(prev => !prev);
-                    setUpdatePasswordMode(false)
                 }} className='mx-auto my-0 block mb-3'>
                     {isLogIn ? "create an account" : "log in with existing account"}
-                </Button>
-                {userToken && !updatePasswordMode && <Button className='mx-auto my-0 block' onClick={()=>{setUpdatePasswordMode(prev => !prev)}}> Update password</Button>}
+                </Button>}
             </CardFooter>
         </Card>
     )
