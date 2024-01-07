@@ -1,55 +1,21 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
-import {createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut,updatePassword} from "firebase/auth";
-import { auth } from '../services/firebase';
+import React, { createContext, useContext, useState } from 'react'
 
 const CartContext = createContext();
 
-export function useCartContext(){
-    return useContext(CartContext);
+export function useCartContext() {
+  return useContext(CartContext);
 }
 
-export function ContextProvider(props) {
-    const [cartProductsDetails, setCartProductsDetails] = useState([]);
-    const [userToken, setUserToken] = useState(null);
-    const [errMessage, setErrMessage] = useState(null);
-    const user = auth.currentUser;
+export function CartContextProvider(props) {
+  const [cartProductsDetails, setCartProductsDetails] = useState([]);
 
-    // useEffect(()=>{
-    //   const unSubscribe = onAuthStateChanged(auth,user => {setCurrentUser(user)})
-    //   return ()=>{
-    //     unSubscribe
-    //   }
-    // },[])
-
-    function signUpHandler(email,password){
-      return createUserWithEmailAndPassword(auth, email,password);
-    }
-
-    function logInHandler(email,password){
-      return signInWithEmailAndPassword(auth,email,password);
-    }
-    function logOutHandler(){
-      signOut(auth);
-    }
-    function updatePasswordHandler(newPassword){
-      return updatePassword(user, newPassword);
-    }
-
-    const contextData ={
-        cartProductsDetails,
-        setCartProductsDetails,
-        signUpHandler,
-        logInHandler,
-        logOutHandler,
-        updatePasswordHandler,
-        userToken,
-        setUserToken,
-        errMessage,
-        setErrMessage,
-    }
+  const contextData = {
+    cartProductsDetails,
+    setCartProductsDetails,
+  }
   return (
     <CartContext.Provider value={contextData}>
-        {props.children}
+      {props.children}
     </CartContext.Provider>
   )
 }
