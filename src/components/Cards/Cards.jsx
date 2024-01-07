@@ -7,36 +7,36 @@ import {
     Button,
     Typography,
 } from "@material-tailwind/react";
-import { useCartContext } from '../../context/CartContext';
-import { makePostRequest } from '../../services/api';
 import { Link } from 'react-router-dom';
+import { useCartContext } from '../../context/CartContext';
 
 function Cards({ products }) {
     const { cartProductsDetails, setCartProductsDetails } = useCartContext();
-    async function handleAddToCart(productId) {
+    
+    function handleAddToCart(productId) {
         let updateCartDetails = null;
         let isAlreadyExist = cartProductsDetails.some(product => product.id === productId);
         if (isAlreadyExist) {
-            updateCartDetails = cartProductsDetails.map(async (cartProducts) => {
+            updateCartDetails = cartProductsDetails.map((cartProducts) => {
                 if (cartProducts.id === productId) {
-                    const updatedCartProduct = {
-                        ...products,
+                    return {
+                        ...cartProducts,
                         quantity: cartProducts.quantity + 1
                     }
-                    return updatedCartProduct;
                 } else {
-                    return cartProducts
+                    return cartProducts;
                 }
             })
         } else {
             updateCartDetails = [...cartProductsDetails, { ...products, quantity: 1 }]
         }
-
         setCartProductsDetails(updateCartDetails);
     }
+
+
     return (
-        <Link to={`/productdetails/${products.id}`}>
-            <Card className="w-72 m-6">
+        <Card className="w-72 m-6">
+            <Link to={`/productdetails/${products.id}`}>
                 <CardHeader floated={false} className="relative h-56">
                     <img
                         src={products.imageUrl}
@@ -52,11 +52,11 @@ function Cards({ products }) {
                         Price {products.price}
                     </Typography>
                 </CardBody>
-                <CardFooter className="pt-0">
-                    <Button onClick={() => handleAddToCart(products.id)}>Add To Cart</Button>
-                </CardFooter>
-            </Card>
-        </Link>
+            </Link>
+            <CardFooter className="pt-0">
+                <Button type='button' fullWidth onClick={() => { handleAddToCart(products.id) }}>Add To Cart</Button>
+            </CardFooter>
+        </Card>
     )
 }
 
