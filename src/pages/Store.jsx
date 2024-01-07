@@ -34,7 +34,7 @@ const productsArr = [
 function Store() {
     return (
         <>
-            <div className="h-52 flex items-center justify-center bg-blue-gray-700">
+            <div className="h-52 flex items-center justify-center bg-blue-gray-900">
                 <Typography variant='h1' className='text-7xl text-white'>
                     The Generics
                 </Typography>
