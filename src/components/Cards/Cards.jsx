@@ -7,31 +7,61 @@ import {
     Button,
     Typography,
 } from "@material-tailwind/react";
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useCartContext } from '../../context/CartContext';
+const BASE_URL = `https://crudcrud.com/api/9d10106cf13d4ee18090a8c5767bfaa4/cartdetails`;
+
 
 function Cards({ products }) {
     const { cartProductsDetails, setCartProductsDetails } = useCartContext();
-    
-    function handleAddToCart(productId) {
+
+    async function handleAddToCart(productId) {
         let updateCartDetails = null;
-        let isAlreadyExist = cartProductsDetails.some(product => product.id === productId);
+        const isAlreadyExist = cartProductsDetails.some(product => product.id === productId);
         if (isAlreadyExist) {
+            let updatedProductForApi;
             updateCartDetails = cartProductsDetails.map((cartProducts) => {
                 if (cartProducts.id === productId) {
-                    return {
+                    const updateProduct = {
                         ...cartProducts,
                         quantity: cartProducts.quantity + 1
                     }
+                    updatedProductForApi = updateProduct;
+                    return updateProduct;
+
                 } else {
                     return cartProducts;
                 }
             })
+            const idOfProduct = updatedProductForApi._id;
+            await updateRequestHandler({ ...updatedProductForApi }, idOfProduct);
         } else {
-            updateCartDetails = [...cartProductsDetails, { ...products, quantity: 1 }]
+            const updateProduct = { ...products, quantity: 1 };
+            const res = await postRequestHandler(updateProduct);
+            updateCartDetails = [...cartProductsDetails, res];
         }
         setCartProductsDetails(updateCartDetails);
     }
+
+    async function postRequestHandler(cartProducts) {
+        try {
+            const { data } = await axios.post(BASE_URL, cartProducts);
+            return data;
+        } catch (err) {
+            console.log("Error in post request");
+        }
+    }
+
+    async function updateRequestHandler(cartProducts, id) {
+        delete cartProducts._id;
+        try {
+            axios.put(`${BASE_URL}/${id}`, cartProducts);
+        } catch (err) {
+            console.log("Error in put request");
+        }
+    }
+
 
 
     return (

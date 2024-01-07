@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { createContext, useContext, useState } from 'react'
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updatePassword } from "firebase/auth";
 import { auth } from '../services/firebase';
 
@@ -16,7 +16,6 @@ export function AuthContextProvider(props) {
     const [errMessage, setErrMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const user = auth.currentUser;
-
     // useEffect(()=>{
     //     if(userToken){
     //         setTimeout(()=>{
@@ -24,13 +23,6 @@ export function AuthContextProvider(props) {
     //         },1000*60*5)
     //     }
     // },[userToken])
-
-    // useEffect(()=>{
-    //   const unSubscribe = onAuthStateChanged(auth,user => {setCurrentUser(user)})
-    //   return ()=>{
-    //     unSubscribe
-    //   }
-    // },[])
 
     function signUpHandler(email, password) {
         return createUserWithEmailAndPassword(auth, email, password);
@@ -56,7 +48,7 @@ export function AuthContextProvider(props) {
         errMessage,
         setErrMessage,
         isLoading,
-        setIsLoading
+        setIsLoading,
     }
     return (
         <AuthContext.Provider value={contextData}>
