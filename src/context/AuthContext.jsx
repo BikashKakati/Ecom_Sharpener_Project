@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from 'react'
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updatePassword } from "firebase/auth";
-import { auth } from '../services/firebase';
+import { auth } from '../services/firebase-config';
 
 const LOCAL_STORAGE_KEY = "USER_TOKEN";
 
@@ -16,13 +16,7 @@ export function AuthContextProvider(props) {
     const [errMessage, setErrMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const user = auth.currentUser;
-    // useEffect(()=>{
-    //     if(userToken){
-    //         setTimeout(()=>{
-    //             localStorage.setItem(LOCAL_STORAGE_KEY,null);
-    //         },1000*60*5)
-    //     }
-    // },[userToken])
+
 
     function signUpHandler(email, password) {
         return createUserWithEmailAndPassword(auth, email, password);

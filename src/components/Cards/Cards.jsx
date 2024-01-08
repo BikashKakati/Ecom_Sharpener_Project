@@ -10,7 +10,7 @@ import {
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useCartContext } from '../../context/CartContext';
-const BASE_URL = `https://crudcrud.com/api/9d10106cf13d4ee18090a8c5767bfaa4/cartdetails`;
+const BASE_URL = "https://crudcrud.com/api/9bb3324531e044108ea0c2ede13a3a05/cartdetails";
 
 
 function Cards({ products }) {
@@ -27,6 +27,7 @@ function Cards({ products }) {
                         ...cartProducts,
                         quantity: cartProducts.quantity + 1
                     }
+                    
                     updatedProductForApi = updateProduct;
                     return updateProduct;
 
@@ -56,7 +57,7 @@ function Cards({ products }) {
     async function updateRequestHandler(cartProducts, id) {
         delete cartProducts._id;
         try {
-            axios.put(`${BASE_URL}/${id}`, cartProducts);
+            await axios.put(`${BASE_URL}/${id}`, cartProducts);
         } catch (err) {
             console.log("Error in put request");
         }

@@ -4,8 +4,8 @@ import {
     Button,
     Typography,
 } from "@material-tailwind/react";
-import { useEffect, useRef, useState } from "react";
-import { makePostRequest } from "../../services/api";
+import { useRef, useState } from "react";
+import { makePostRequest } from "../../services/firebase-api";
 
 
 function Form() {
@@ -34,7 +34,7 @@ function Form() {
                     </Typography>
                     <Input
                         size="lg"
-                        placeholder="name@mail.com"
+                        placeholder="name"
                         className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                         labelProps={{
                             className: "before:content-none after:content-none",

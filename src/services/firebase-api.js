@@ -1,9 +1,9 @@
 
-const BASE_URL = 'https://the-generics-store-default-rtdb.firebaseio.com';
+const AUTH_URL = 'https://the-generics-store-default-rtdb.firebaseio.com';
 
 export async function makePostRequest(contactsDetails,endPoint) {
     try {
-        const res = await fetch(`${BASE_URL}/${endPoint}`, {
+        const res = await fetch(`${AUTH_URL}/${endPoint}`, {
             method: "POST",
             body: JSON.stringify(contactsDetails),
             headers: {

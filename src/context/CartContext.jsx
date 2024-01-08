@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import axios from 'axios';
 const CartContext = createContext();
-const BASE_URL = `https://crudcrud.com/api/9d10106cf13d4ee18090a8c5767bfaa4/cartdetails`;
+const BASE_URL = "https://crudcrud.com/api/9bb3324531e044108ea0c2ede13a3a05/cartdetails";
 
 export function useCartContext() {
   return useContext(CartContext);
@@ -9,18 +9,21 @@ export function useCartContext() {
 
 export function CartContextProvider(props) {
   const [cartProductsDetails, setCartProductsDetails] = useState([]);
-  
-  async function getRequestHandler(){
-    try{
+
+  useEffect(() => {
+    getRequestHandler();
+  }, [])
+
+  async function getRequestHandler() {
+    try {
       const {data} = await axios.get(BASE_URL);
-     setCartProductsDetails(data && [...data]);
-    }catch(err){
+      const productData = data.length ? [...data] : [];
+      setCartProductsDetails(productData);
+    } catch (err) {
       console.log("Error in get request");
     }
   }
-  useEffect(()=>{
-      getRequestHandler();
-  },[])
+  
 
   const contextData = {
     cartProductsDetails,

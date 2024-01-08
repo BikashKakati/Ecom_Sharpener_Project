@@ -59,7 +59,8 @@ function Header() {
   const {userToken, logOutHandler, setErrMessage, setUserToken} = useAuthContext();
   const Navigate = useNavigate();
 
-  const totalQuantity = cartProductsDetails.reduce((initialQuantity, products) =>{
+  
+  const totalQuantity = cartProductsDetails?.reduce((initialQuantity, products) =>{
     return initialQuantity += products.quantity;
   },0)
 

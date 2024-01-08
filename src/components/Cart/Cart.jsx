@@ -3,7 +3,8 @@ import { Button, Card, CardBody, CardFooter, CardHeader, Typography } from '@mat
 import React from 'react'
 import { useCartContext } from '../../context/CartContext'
 import axios from 'axios';
-const BASE_URL = `https://crudcrud.com/api/9d10106cf13d4ee18090a8c5767bfaa4/cartdetails`;
+
+const BASE_URL = "https://crudcrud.com/api/9bb3324531e044108ea0c2ede13a3a05/cartdetails";
 
 function Cart({ openCart, setOpenCart }) {
     const { cartProductsDetails, setCartProductsDetails } = useCartContext();
